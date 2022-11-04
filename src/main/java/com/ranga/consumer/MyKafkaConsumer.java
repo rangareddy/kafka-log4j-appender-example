@@ -30,10 +30,10 @@ public class MyKafkaConsumer {
     public static void main(String[] args) {
         String bootstrapServers = "172.25.37.70:9092";
         String topicName = "kafka_log4j";
-        try (Consumer<String, String> consumer = getConsumer(bootstrapServers, topicName);) {
+        try (Consumer<String, String> consumer = getConsumer(bootstrapServers, topicName)) {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMinutes(1));
-                System.out.println("Total Records : "+records.count());
+                System.out.println("Total Records : " + records.count());
                 records.forEach(record -> {
                     System.out.println("Record Key " + record.key());
                     System.out.println("Record value " + record.value());

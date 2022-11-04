@@ -23,7 +23,7 @@ public class MyKafkaProducer {
         Admin admin = Admin.create(properties);
         try {
             if (!admin.listTopics().names().get().contains(topicName)) {
-                admin.createTopics(Collections.singleton(new NewTopic(topicName, 1, (short)1))).all().get();
+                admin.createTopics(Collections.singleton(new NewTopic(topicName, 1, (short) 1))).all().get();
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
