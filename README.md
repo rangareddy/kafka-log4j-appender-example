@@ -30,11 +30,15 @@ java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.Kafka
 
 **Producer Example**
 
+> Before running producer example, update the bootstrapServers value
+> 
 ```sh
 java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.producer.MyKafkaProducer
 ```
 
-**Consumer Example**
+**Consumer Example** - 
+
+> Before running consumer example, update the bootstrapServers value
 
 ```sh
 java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consumer.MyKafkaConsumer
