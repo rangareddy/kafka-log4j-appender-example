@@ -1,4 +1,4 @@
-package com.ranga;
+package com.ranga.consumer;
 
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;

@@ -1,10 +1,8 @@
-package com.ranga;
+package com.ranga.appender;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.ByteArraySerializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.log4jappender.KafkaLog4jAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
