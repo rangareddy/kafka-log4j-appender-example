@@ -25,7 +25,7 @@ log4j.appender.KAFKA.brokerList=localhost:9092
 Step4: Build the `kafka-log4j-appender-example` project
 
 ```sh
-mvn clean package
+mvn clean package -DskipTests
 ```
 
 Step5: Run the following code to test
@@ -52,4 +52,18 @@ java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consu
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:43 Record value 2022-11-17 15:08:46 - Hello I am from com.ranga.producer.MyKafkaProducer
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:44 Record partition 0
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:45 Record offset 1
+```
+
+## SASL_SSL
+
+```sh
+java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.producer.MyKafkaProducerSaslSsl
+```
+
+```sh
+java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consumer.MyKafkaConsumerSaslSsl
+```
+
+```sh
+java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.KafkaLog4jAppenderSaslSslApp
 ```
