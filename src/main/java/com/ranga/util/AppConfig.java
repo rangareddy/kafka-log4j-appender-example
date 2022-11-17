@@ -16,6 +16,10 @@ public class AppConfig {
         topicName = properties.getProperty("log4j.appender.KAFKA.topic");
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     public String getBootstrapServers() {
         return bootstrapServers;
     }

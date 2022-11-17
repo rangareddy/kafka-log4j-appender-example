@@ -11,7 +11,7 @@ Step2: Download the `kafka-log4j-appender-example` project
 
 ```sh
 git clone https://github.com/rangareddy/kafka-log4j-appender-example.git
-cd /root/kafka-log4j-appender-example
+cd kafka-log4j-appender-example/
 ```
 
 Step3: Update the bootstrapServers in `src/main/resources/log4j.properties`. For example,
