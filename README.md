@@ -39,3 +39,17 @@ Step6: Verify the log messages are written to Kafka topic `kafka_log4j_topic`
 ```sh
 java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consumer.MyKafkaConsumer
 ```
+
+**Output**
+
+```shell
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:40 Total Records : 2
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:42 Record Key null
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:43 Record value 2022-11-17 15:08:01 - Hello I am from com.ranga.producer.MyKafkaProducer
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:44 Record partition 0
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:45 Record offset 0
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:42 Record Key null
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:43 Record value 2022-11-17 15:08:46 - Hello I am from com.ranga.producer.MyKafkaProducer
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:44 Record partition 0
+2022/11/17 15:09:07 INFO  MyKafkaConsumer:45 Record offset 1
+```

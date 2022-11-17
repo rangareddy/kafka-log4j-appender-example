@@ -19,6 +19,7 @@ import java.util.Properties;
 public class MyKafkaProducer {
 
     private static final Logger logger = Logger.getLogger("kafkaLogger");
+    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static void createTopic(AppConfig appConfig) {
         Properties kafkaProperties = new Properties();
@@ -38,11 +39,10 @@ public class MyKafkaProducer {
         AppConfig appConfig = new AppConfig(properties);
         //createTopic(appConfig);
         Producer<String, String> producer = getProducer(appConfig.getBootstrapServers());
-        String message = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " - Hello World!";
-        System.out.println(message);
+        String message = df.format(new Date()) + " - Hello I am from "+MyKafkaProducer.class.getName();
         ProducerRecord<String, String> record = new ProducerRecord<>(appConfig.getTopicName(), message);
         producer.send(record);
-        logger.info("Message sent to kafka successfully");
+        logger.info("Hello, I am from KafkaLog4jAppender");
         producer.close();
     }
 
