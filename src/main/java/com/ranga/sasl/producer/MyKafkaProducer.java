@@ -5,10 +5,7 @@ import com.ranga.util.PropertyUtil;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.log4j.Logger;
@@ -41,12 +38,14 @@ public class MyKafkaProducer {
         File file = new File("src/main/resources/log4j_sasl.properties");
         Properties properties = PropertyUtil.getProperties(file);
         AppConfig appConfig = new AppConfig(properties);
-        //createTopic(appConfig);
+        createTopic(appConfig);
         Producer<String, String> producer = getProducer(appConfig);
         String message = df.format(new Date()) + " - Hello I am from "+ MyKafkaProducer.class.getName();
         logger.info("Sending message: "+message);
         ProducerRecord<String, String> record = new ProducerRecord<>(appConfig.getTopicName(), message);
         producer.send(record);
+        ProducerCallBack callBack = new ProducerCallBack();
+        producer.send(record, callBack);
         kafkaSaslLogger.info("Hello, I am from KafkaLog4jAppender");
         producer.close();
         logger.info("MyKafkaProducer finished");
@@ -60,5 +59,17 @@ public class MyKafkaProducer {
         kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
         kafkaProperties.put(SaslConfigs.SASL_KERBEROS_SERVICE_NAME, "kafka");
         return new KafkaProducer<>(kafkaProperties);
+    }
+
+    private static class ProducerCallBack implements Callback {
+        @Override
+        public void onCompletion(RecordMetadata recordMetadata, Exception e) {
+            if (e != null) {
+                logger.error("Error while producing message to topic :" + recordMetadata, e);
+            } else {
+                String message = String.format("sent message to topic:%s partition:%s  offset:%s", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
+                logger.info(message);
+            }
+        }
     }
 }
