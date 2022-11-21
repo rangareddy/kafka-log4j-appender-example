@@ -54,16 +54,185 @@ java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consu
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:45 Record offset 1
 ```
 
+## SASL_PLAINTEXT
+
+vi /tmp/kafka_client_jaas.conf
+
+```shell
+KafkaClient{
+    com.sun.security.auth.module.Krb5LoginModule required
+    useKeyTab=true
+    storeKey=true
+    keyTab="/tmp/kafka.keytab"
+    principal="kafka/localhost@HADOOP.COM"
+    serviceName="kafka";
+};
+```
+
+```shell
+export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf"
+```
+
+**Create a Kafka topic**
+
+vi /tmp/config.properties
+
+```shell
+security.protocol=SASL_PLAINTEXT
+sasl.kerberos.service.name=kafka
+```
+
+```shell
+kafka-topics --create --bootstrap-server 172.25.40.135:9092 \
+  --replication-factor 1 --partitions 3 --topic kafka_sasl_topic --command-config /tmp/config.properties
+```
+
+**Kafka Console Producer**
+
+vi /tmp/producer.properties
+
+```shell
+security.protocol=SASL_PLAINTEXT
+sasl.kerberos.service.name=kafka
+```
+
+```shell
+kafka-console-producer --broker-list 172.25.40.135:9092 \
+  --topic kafka_sasl_topic --producer.config /tmp/producer.properties
+```
+
+**Kafka Console Consumer**
+
+vi /tmp/consumer.properties
+
+```shell
+security.protocol=SASL_PLAINTEXT
+group.id=my_consumer_group
+sasl.kerberos.service.name=kafka
+```
+
+```sh
+kafka-console-consumer --bootstrap-server 172.25.40.135:9092 \
+  --topic kafka_sasl_topic --consumer.config /tmp/consumer.properties --from-beginning
+```
+
+**Java Producer SASL Example**
+
+```sh
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf \
+ -Djava.security.krb5.conf=/tmp/krb5.conf \
+ com.ranga.sasl.producer.MyKafkaProducer
+```
+
+**Java Consumer SASL Example**
+
+```sh
+java -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf -Djava.security.krb5.conf=/tmp/krb5.conf \
+  -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.consumer.MyKafkaConsumer
+```
+
+**Java KafkaLog4jAppender SASL Example**
+
+```sh
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.KafkaLog4jAppenderSaslApp
+```
+
 ## SASL_SSL
 
-```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.producer.MyKafkaProducerSaslSsl
+**Export the jaas file**
+
+vi /tmp/kafka_client_jaas.conf
+
+```shell
+KafkaClient{
+    com.sun.security.auth.module.Krb5LoginModule required
+    useKeyTab=true
+    storeKey=true
+    keyTab="/tmp/kafka.keytab"
+    principal="kafka/localhost@HADOOP.COM"
+    serviceName="kafka";
+};
+```
+
+```shell
+export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf"
+```
+
+**Create a Kafka topic**
+
+vi /tmp/config.properties
+
+```shell
+security.protocol=SASL_SSL 
+ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+ssl.endpoint.identification.algorithm=
+ssl.keystore.location=/var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks
+ssl.keystore.password=28jSzhtVA3BEBeQpC1PklOaGp8l80pm10X2bDLtb4qf
+```
+
+```shell
+keytool -list -keystore /var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks \
+  -storepass 28jSzhtVA3BEBeQpC1PklOaGp8l80pm10X2bDLtb4qf 
+
+keytool -v -keystore /var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks -list
+
+keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks \
+  -storepass 88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+```
+
+```shell
+kafka-topics --create --bootstrap-server 172.25.40.135:9092 \
+  --replication-factor 1 --partitions 3 --topic kafka_log4j_topic --command-config /tmp/config.properties
+```
+
+**Kafka Console Producer**
+
+vi /tmp/producer.properties
+
+```shell
+security.protocol=SASL_SSL 
+ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+sasl.kerberos.service.name=kafka
+```
+
+```shell
+kafka-console-producer --broker-list 172.25.40.135:9092 \
+--topic kafka_log4j_topic --producer.config /tmp/producer.properties
+```
+
+**Kafka Console Consumer**
+
+vi /tmp/consumer.properties
+
+```shell
+security.protocol=SASL_SSL
+ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
+ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+group.id=my_consumer_group
 ```
 
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consumer.MyKafkaConsumerSaslSsl
+kafka-console-consumer --bootstrap-server 172.25.40.135:9092 \
+--topic kafka_log4j_topic --consumer.config /tmp/consumer.properties --from-beginning
 ```
 
+**Java Producer SASL_SSL Example**
+
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.KafkaLog4jAppenderSaslSslApp
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.producer.MyKafkaProducer
+```
+
+**Java Consumer SASL_SSL Example**
+
+```sh
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.consumer.MyKafkaConsumer
+```
+
+**Java KafkaLog4jAppender SASL_SSL Example**
+
+```sh
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.KafkaLog4jAppenderSaslSslApp
 ```

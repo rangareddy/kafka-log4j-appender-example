@@ -1,7 +1,0 @@
-Client {
-   com.sun.security.auth.module.Krb5LoginModule required
-   useKeyTab=true
-   storeKey=true
-   keyTab="/var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/kafka.keytab"
-   principal="kafka/172.27.196.140@ROOT.HWX.SITE";
-};

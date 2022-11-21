@@ -1,4 +1,4 @@
-package com.ranga.consumer;
+package com.ranga.sasl_ssl.consumer;
 
 import com.ranga.util.AppConfig;
 import com.ranga.util.PropertyUtil;
@@ -17,9 +17,9 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 
-public class MyKafkaConsumerSaslSsl {
+public class MyKafkaConsumer {
 
-    private static final Logger logger = Logger.getLogger(MyKafkaConsumerSaslSsl.class.getName());
+    private static final Logger logger = Logger.getLogger(MyKafkaConsumer.class.getName());
 
     public static Consumer<String, String> getConsumer(AppConfig appConfig) {
         Properties kafkaProperties = new Properties();

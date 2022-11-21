@@ -7,7 +7,7 @@ public class AppConfig {
     private final Properties properties;
     private final String bootstrapServers;
     private final String topicName;
-    private final String consumerGroupId = "my_consumer";
+    private final String consumerGroupId = "my_consumer_group";
     private final String autoOffsetResetConfig = "earliest";
 
     public AppConfig(Properties properties) {
