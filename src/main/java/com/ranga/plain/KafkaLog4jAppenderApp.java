@@ -1,4 +1,4 @@
-package com.ranga;
+package com.ranga.plain;
 
 import org.apache.log4j.Logger;
 

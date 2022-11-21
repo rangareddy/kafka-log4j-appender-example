@@ -31,7 +31,7 @@ mvn clean package -DskipTests
 Step5: Run the following code to test
 
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.KafkaLog4jAppenderApp
+java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.plain.KafkaLog4jAppenderApp
 ```
 
 Step6: Verify the log messages are written to Kafka topic `kafka_log4j_topic`
