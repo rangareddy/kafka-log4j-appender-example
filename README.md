@@ -56,7 +56,9 @@ java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consu
 
 ## SASL_PLAINTEXT
 
-vi /tmp/kafka_client_jaas.conf
+**Step1:** Exporting the kafka client jaas file
+
+`vi /tmp/kafka_client_jaas.conf`
 
 ```shell
 KafkaClient{
@@ -73,9 +75,9 @@ KafkaClient{
 export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf"
 ```
 
-**Create a Kafka topic**
+**Step2:** Create a Kafka topic
 
-vi /tmp/config.properties
+`vi /tmp/config.properties`
 
 ```shell
 security.protocol=SASL_PLAINTEXT
@@ -84,12 +86,13 @@ sasl.kerberos.service.name=kafka
 
 ```shell
 kafka-topics --create --bootstrap-server 172.25.40.135:9092 \
-  --replication-factor 1 --partitions 3 --topic kafka_sasl_topic --command-config /tmp/config.properties
+  --replication-factor 1 --partitions 3 --topic kafka_log4j_sasl_topic \
+  --command-config /tmp/config.properties
 ```
 
-**Kafka Console Producer**
+**Step3:** Kafka Console Producer
 
-vi /tmp/producer.properties
+`vi /tmp/producer.properties`
 
 ```shell
 security.protocol=SASL_PLAINTEXT
@@ -98,12 +101,13 @@ sasl.kerberos.service.name=kafka
 
 ```shell
 kafka-console-producer --broker-list 172.25.40.135:9092 \
-  --topic kafka_sasl_topic --producer.config /tmp/producer.properties
+  --topic kafka_log4j_sasl_topic \
+  --producer.config /tmp/producer.properties
 ```
 
-**Kafka Console Consumer**
+**Step4:** Kafka Console Consumer
 
-vi /tmp/consumer.properties
+`vi /tmp/consumer.properties`
 
 ```shell
 security.protocol=SASL_PLAINTEXT
@@ -113,10 +117,13 @@ sasl.kerberos.service.name=kafka
 
 ```sh
 kafka-console-consumer --bootstrap-server 172.25.40.135:9092 \
-  --topic kafka_sasl_topic --consumer.config /tmp/consumer.properties --from-beginning
+  --topic kafka_log4j_sasl_topic --from-beginning \
+  --consumer.config /tmp/consumer.properties 
 ```
 
-**Java Producer SASL Example**
+### Java API Example
+
+**Step1:** Java Producer SASL Example
 
 ```sh
 java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
@@ -125,14 +132,14 @@ java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
  com.ranga.sasl.producer.MyKafkaProducer
 ```
 
-**Java Consumer SASL Example**
+**Step2:** Java Consumer SASL Example
 
 ```sh
 java -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf -Djava.security.krb5.conf=/tmp/krb5.conf \
   -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.consumer.MyKafkaConsumer
 ```
 
-**Java KafkaLog4jAppender SASL Example**
+**Step3:** Java KafkaLog4jAppender SASL Example
 
 ```sh
 java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.KafkaLog4jAppenderSaslApp
@@ -184,12 +191,12 @@ keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_tr
 
 ```shell
 kafka-topics --create --bootstrap-server 172.25.40.135:9092 \
-  --replication-factor 1 --partitions 3 --topic kafka_log4j_topic --command-config /tmp/config.properties
+  --replication-factor 1 --partitions 3 --topic kafka_log4j_sasl_ssl_topic --command-config /tmp/config.properties
 ```
 
 **Kafka Console Producer**
 
-vi /tmp/producer.properties
+`vi /tmp/producer.properties`
 
 ```shell
 security.protocol=SASL_SSL 
@@ -200,12 +207,13 @@ sasl.kerberos.service.name=kafka
 
 ```shell
 kafka-console-producer --broker-list 172.25.40.135:9092 \
---topic kafka_log4j_topic --producer.config /tmp/producer.properties
+  --topic kafka_log4j_sasl_ssl_topic \
+  --producer.config /tmp/producer.properties
 ```
 
 **Kafka Console Consumer**
 
-vi /tmp/consumer.properties
+`vi /tmp/consumer.properties`
 
 ```shell
 security.protocol=SASL_SSL
@@ -216,7 +224,8 @@ group.id=my_consumer_group
 
 ```sh
 kafka-console-consumer --bootstrap-server 172.25.40.135:9092 \
---topic kafka_log4j_topic --consumer.config /tmp/consumer.properties --from-beginning
+  --topic kafka_log4j_sasl_ssl_topic --from-beginning \
+  --consumer.config /tmp/consumer.properties
 ```
 
 **Java Producer SASL_SSL Example**
