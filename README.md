@@ -242,7 +242,7 @@ ssl.keystore.password=12345
 > keytool -list -keystore /tmp/my_keystore.jks -storepass 12345
 
 ```sh
-kafka-topics --create --bootstrap-server localhost:9092 \
+kafka-topics --create --bootstrap-server `hostname -f`:9092 \
   --replication-factor 1 --partitions 3 --topic kafka_log4j_topic \
   --command-config /tmp/config.properties
 ```
@@ -250,7 +250,7 @@ kafka-topics --create --bootstrap-server localhost:9092 \
 Verify the topics
 
 ```sh
-kafka-topics --list --bootstrap-server localhost:9092
+kafka-topics --list --bootstrap-server `hostname -f`:9092
 ```
 
 #### Step3: Producing the Kafka Messages
@@ -265,7 +265,7 @@ sasl.kerberos.service.name=kafka
 ```
 
 ```sh
-kafka-console-producer --broker-list localhost:9092 \
+kafka-console-producer --broker-list `hostname -f`:9092 \
   --topic kafka_log4j_topic \
   --producer.config /tmp/producer.properties
 ```
@@ -282,7 +282,7 @@ group.id=my_consumer_group
 ```
 
 ```sh
-kafka-console-consumer --bootstrap-server localhost:9092 \
+kafka-console-consumer --bootstrap-server `hostname -f`:9092 \
   --topic kafka_log4j_topic --from-beginning \
   --consumer.config /tmp/consumer.properties
 ```

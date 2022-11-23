@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class ProducerUtil implements Closeable {
 
-    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static final Logger logger = Logger.getLogger(ProducerUtil.class.getName());
     private final Producer<String, String> producer;
     private final String topicName;
@@ -45,7 +45,7 @@ public class ProducerUtil implements Closeable {
     }
 
     public void produce() {
-        String message = df.format(new Date()) + " - Hello I am from Java producers produce() message";
+        String message = "Hello I am from Java producers produce() message";
         produce(message);
     }
 
@@ -60,6 +60,7 @@ public class ProducerUtil implements Closeable {
     public void close() {
         if (producer != null) {
             producer.close();
+            logger.info("Producer closed successfully");
         }
     }
 
@@ -69,7 +70,7 @@ public class ProducerUtil implements Closeable {
             if (e != null) {
                 logger.error("Error while producing message to topic :" + recordMetadata, e);
             } else {
-                String message = String.format("sent message to topic:%s partition:%s  offset:%s", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
+                String message = String.format("Sent message to topic:%s partition:%s  offset:%s", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
                 logger.info(message);
             }
         }
