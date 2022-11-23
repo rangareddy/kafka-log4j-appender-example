@@ -15,8 +15,9 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
-        <junit.version>4.12</junit.version>
-        <kafka.version>2.5.0.7.1.6.0-297</kafka.version>
+        <junit.version>4.13</junit.version>
+        <!--<kafka.version>2.5.0.7.1.6.0-297</kafka.version> -->
+        <kafka.version>2.5.0.7.1.7.1000-141</kafka.version>
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
