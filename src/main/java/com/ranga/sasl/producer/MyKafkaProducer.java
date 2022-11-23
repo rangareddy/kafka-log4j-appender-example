@@ -4,7 +4,7 @@ import com.ranga.util.AppConfig;
 import com.ranga.util.ProducerUtil;
 import com.ranga.util.PropertyUtil;
 import org.apache.kafka.clients.CommonClientConfigs;
-import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 

@@ -11,6 +11,7 @@ public class PropertyUtil {
         File file = new File("src/main/resources/log4j.properties");
         return getProperties(file);
     }
+
     public static Properties getProperties(File file) {
         Properties prop = new Properties();
         try (InputStream stream = new FileInputStream(file)) {

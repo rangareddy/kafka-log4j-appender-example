@@ -37,12 +37,17 @@ java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.plain
 Step6: Verify the log messages are written to Kafka topic `kafka_log4j_topic`
 
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.consumer.MyKafkaConsumer
+java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.plain.consumer.MyKafkaConsumer
+```
+
+```sh
+kafka-console-consumer --bootstrap-server 172.25.40.135:9092 \
+  --topic kafka_log4j_topic --from-beginning 
 ```
 
 **Output**
 
-```shell
+```sh
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:40 Total Records : 2
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:42 Record Key null
 2022/11/17 15:09:07 INFO  MyKafkaConsumer:43 Record value 2022-11-17 15:08:01 - Hello I am from com.ranga.producer.MyKafkaProducer
@@ -173,20 +178,15 @@ vi /tmp/config.properties
 ```shell
 security.protocol=SASL_SSL 
 ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
-ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+ssl.truststore.password=12345
 ssl.endpoint.identification.algorithm=
 ssl.keystore.location=/var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks
-ssl.keystore.password=28jSzhtVA3BEBeQpC1PklOaGp8l80pm10X2bDLtb4qf
+ssl.keystore.password=12345
 ```
 
 ```shell
 keytool -list -keystore /var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks \
-  -storepass 28jSzhtVA3BEBeQpC1PklOaGp8l80pm10X2bDLtb4qf 
-
-keytool -v -keystore /var/run/cloudera-scm-agent/process/86-kafka-KAFKA_BROKER/cm-auto-host_keystore.jks -list
-
-keytool -list -keystore /var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks \
-  -storepass 88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+  -storepass 12345
 ```
 
 ```shell
@@ -201,7 +201,7 @@ kafka-topics --create --bootstrap-server 172.25.40.135:9092 \
 ```shell
 security.protocol=SASL_SSL 
 ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
-ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+ssl.truststore.password=12345
 sasl.kerberos.service.name=kafka
 ```
 
@@ -218,7 +218,7 @@ kafka-console-producer --broker-list 172.25.40.135:9092 \
 ```shell
 security.protocol=SASL_SSL
 ssl.truststore.location=/var/lib/cloudera-scm-agent/agent-cert/cm-auto-global_truststore.jks
-ssl.truststore.password=88NcTHAEfFzbneH5YzhoDfcQmVY23gPzkaaNdHhd4Mp
+ssl.truststore.password=12345
 group.id=my_consumer_group
 ```
 
