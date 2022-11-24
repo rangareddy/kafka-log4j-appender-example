@@ -92,7 +92,9 @@ In order to pass external log4j2.xml configuration file, we need to use `-Dlog4j
 -Dlog4j2.configurationFile=file:/tmp/log4j2.xml
 ```
 
-### PLAINTEXT
+## Kafka Log4j Integration
+
+### 1. PLAINTEXT
 
 **Step1:** Download the `kafka-log4j-appender-example` project
 
@@ -101,7 +103,7 @@ git clone https://github.com/rangareddy/kafka-log4j-appender-example.git
 cd kafka-log4j-appender-example/
 ```
 
-**Step2:** According to your cluster, update the brokerList in `log4j.properties`.
+**Step2:** According to your cluster, update the following properties in `log4j.properties`.
 
 `vi config/log4j.properties`
 
@@ -118,20 +120,29 @@ mvn clean package -DskipTests
 **Step4:** Run the following code to test
 
 ```sh
-java -Dlog4j.configuration=file:config/log4j.properties -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
-  com.ranga.plain.KafkaLog4jAppenderApp
+java -Dlog4j.configuration=file:config/log4j.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.plain.KafkaLog4jAppenderApp
 ```
 
 **Step5:** Verify the log messages are written to Kafka topic `kafka_log4j_topic`
 
 ```sh
-java -Dlog4j.configuration=file:config/log4j.properties -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
-  com.ranga.plain.consumer.MyKafkaConsumer
+java -Dlog4j.configuration=file:config/log4j.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.plain.consumer.MyKafkaConsumer
 ```
 
-### SASL_PLAINTEXT
+### 2. SASL_PLAINTEXT
 
-**Step1:** Exporting the kafka client jaas file
+**Step1:** Download the `kafka-log4j-appender-example` project
+
+```sh
+git clone https://github.com/rangareddy/kafka-log4j-appender-example.git
+cd kafka-log4j-appender-example/
+```
+
+**Step2:** Creating and Exporting the kafka client jaas file
 
 `vi /tmp/kafka_client_jaas.conf`
 
@@ -146,36 +157,48 @@ KafkaClient{
 };
 ```
 
+> According to your cluster update the `keyTab` and `principal` values in above config file.
+
 ```shell
 export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf"
 ```
 
-**Step1:** Update the bootstrapServers in `src/main/resources/log4j_sasl.properties`. For example,
+**Step3:** According to your cluster, update the following property values in `log4j_sasl.properties`.
+
+`vi config/log4j_sasl.properties`
 
 ```sh
 log4j.appender.KAFKA.brokerList=localhost:9092
+log4j.appender.KAFKA.clientJaasConfPath=/tmp/kafka_client_jaas.conf
+log4j.appender.KAFKA.kerb5ConfPath=/tmp/krb5.conf
 ```
 
-**Step2:** Java Producer SASL Example
+**Step4:** Build the `kafka-log4j-appender-example` project
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
- -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf \
- -Djava.security.krb5.conf=/tmp/krb5.conf \
- com.ranga.sasl.producer.MyKafkaProducer
+mvn clean package -DskipTests
 ```
 
-**Step3:** Java Consumer SASL Example
+**Step5:** Run the following code to test
 
 ```sh
-java -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf -Djava.security.krb5.conf=/tmp/krb5.conf \
-  -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.consumer.MyKafkaConsumer
+java 
+ -Dlog4j.configuration=file:config/log4j_sasl.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.sasl.KafkaLog4jAppenderSaslApp
 ```
 
-**Step4:** Java KafkaLog4jAppender SASL Example
+>  If application expects client jaas file pass the below parameters with updated paths.
+> -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf \
+> -Djava.security.krb5.conf=/tmp/krb5.conf 
+
+**Step6:** Verify the log messages are written to Kafka topic `kafka_log4j_sasl_topic`
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.KafkaLog4jAppenderSaslApp
+java 
+ -Dlog4j.configuration=file:config/log4j_sasl.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.sasl.consumer.MyKafkaConsumer
 ```
 
 ### SASL_SSL
@@ -183,19 +206,22 @@ java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl.K
 **Step1:** Java Producer SASL_SSL Example
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.producer.MyKafkaProducer
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+  com.ranga.sasl_ssl.producer.MyKafkaProducer
 ```
 
 **Step2:** Java Consumer SASL_SSL Example
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.consumer.MyKafkaConsumer
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+  com.ranga.sasl_ssl.consumer.MyKafkaConsumer
 ```
 
 **Step3:** Java KafkaLog4jAppender SASL_SSL Example
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.sasl_ssl.KafkaLog4jAppenderSaslSslApp
+java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+  com.ranga.sasl_ssl.KafkaLog4jAppenderSaslSslApp
 ```
 
 ## Kafka CLI Commands
