@@ -111,7 +111,9 @@ cd kafka-log4j-appender-example/
 log4j.appender.KAFKA.brokerList=localhost:9092
 ```
 
-**Step3:** Build the `kafka-log4j-appender-example` project
+**Step3:** Build the `kafka-log4j-appender-example` project.
+
+> Update the `kafka.version` according to your cluster in pom.xml file
 
 ```sh
 mvn clean package -DskipTests
@@ -174,6 +176,8 @@ log4j.appender.KAFKA.kerb5ConfPath=/tmp/krb5.conf
 ```
 
 **Step4:** Build the `kafka-log4j-appender-example` project
+
+> Update the `kafka.version` according to your cluster in pom.xml file
 
 ```sh
 mvn clean package -DskipTests
@@ -247,6 +251,8 @@ log4j.appender.KAFKA.sslKeystorePassword=changeit
 ```
 
 **Step4:** Build the `kafka-log4j-appender-example` project
+
+> Update the `kafka.version` according to your cluster in pom.xml file
 
 ```sh
 mvn clean package -DskipTests
