@@ -15,6 +15,6 @@ public class KafkaLog4jAppenderApp {
         kafkaLogger.debug("Debug message from KafkaLog4jAppenderApp");
         kafkaLogger.info("Info message from KafkaLog4jAppenderApp");
         kafkaLogger.warn("Warn message from KafkaLog4jAppenderApp");
-        logger.info("Messages are written to Kafka");
+        logger.info("Log messages are written to Kafka");
     }
 }

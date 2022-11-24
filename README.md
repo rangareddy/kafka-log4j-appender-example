@@ -31,7 +31,7 @@ log4j.appender.KAFKA.layout.ConversionPattern=%d{yyyy/MM/dd HH:mm:ss} %-5p %c{1}
 log4j.logger.kafkaLogger=INFO,KAFKA
 ```
 
-In order to external log4j.properties configuration file, we need to use `-Dlog4j.configuration`
+In order to pass external log4j.properties configuration file, we need to use `-Dlog4j.configuration`
 
 ```sh
 -Dlog4j.configuration=file:/tmp/log4j.properties
@@ -86,43 +86,47 @@ In order to external log4j.properties configuration file, we need to use `-Dlog4
 </Configuration>
 ```
 
-In order to external log4j2.xml configuration file, we need to use `-Dlog4j2.configurationFile`
+In order to pass external log4j2.xml configuration file, we need to use `-Dlog4j2.configurationFile`
 
 ```sh
 -Dlog4j2.configurationFile=file:/tmp/log4j2.xml
 ```
 
-Download the `kafka-log4j-appender-example` project
+### PLAINTEXT
+
+**Step1:** Download the `kafka-log4j-appender-example` project
 
 ```sh
 git clone https://github.com/rangareddy/kafka-log4j-appender-example.git
 cd kafka-log4j-appender-example/
 ```
 
-### PLAINTEXT
+**Step2:** According to your cluster, update the brokerList in `log4j.properties`.
 
-**Step1:** Update the bootstrapServers in `src/main/resources/log4j.properties`. For example,
+`vi config/log4j.properties`
 
 ```sh
 log4j.appender.KAFKA.brokerList=localhost:9092
 ```
 
-**Step2:** Build the `kafka-log4j-appender-example` project
+**Step3:** Build the `kafka-log4j-appender-example` project
 
 ```sh
 mvn clean package -DskipTests
 ```
 
-**Step3:** Run the following code to test
+**Step4:** Run the following code to test
 
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.plain.KafkaLog4jAppenderApp
+java -Dlog4j.configuration=file:config/log4j.properties -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+  com.ranga.plain.KafkaLog4jAppenderApp
 ```
 
-**Step4:** Verify the log messages are written to Kafka topic `kafka_log4j_topic`
+**Step5:** Verify the log messages are written to Kafka topic `kafka_log4j_topic`
 
 ```sh
-java -jar target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar com.ranga.plain.consumer.MyKafkaConsumer
+java -Dlog4j.configuration=file:config/log4j.properties -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+  com.ranga.plain.consumer.MyKafkaConsumer
 ```
 
 ### SASL_PLAINTEXT

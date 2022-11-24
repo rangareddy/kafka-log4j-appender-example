@@ -14,6 +14,6 @@ public class KafkaLog4jAppenderSaslSslApp {
         kafkaSaslSslLogger.debug("Debug message from KafkaLog4jAppenderApp");
         kafkaSaslSslLogger.info("Info message from KafkaLog4jAppenderApp");
         kafkaSaslSslLogger.warn("Warn message from KafkaLog4jAppenderApp");
-        logger.info("Messages are written to Kafka");
+        logger.info("Log messages are written to Kafka");
     }
 }

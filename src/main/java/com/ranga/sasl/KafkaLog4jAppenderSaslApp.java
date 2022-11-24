@@ -11,9 +11,9 @@ public class KafkaLog4jAppenderSaslApp {
 
     public static void main(String[] args) {
         logger.info("Writing Log messages to Kafka");
-        kafkaSaslLogger.debug("Debug message from KafkaLog4jAppenderApp");
-        kafkaSaslLogger.info("Info message from KafkaLog4jAppenderApp");
-        kafkaSaslLogger.warn("Warn message from KafkaLog4jAppenderApp");
-        logger.info("Messages are written to Kafka");
+        kafkaSaslLogger.debug("Debug message from KafkaLog4jAppenderSaslApp");
+        kafkaSaslLogger.info("Info message from KafkaLog4jAppenderSaslApp");
+        kafkaSaslLogger.warn("Warn message from KafkaLog4jAppenderSaslApp");
+        logger.info("Log messages are written to Kafka");
     }
 }

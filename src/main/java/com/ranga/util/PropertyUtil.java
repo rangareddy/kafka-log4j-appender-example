@@ -13,7 +13,12 @@ public class PropertyUtil {
 
     private static File getConfigFile(String file) {
         if (file == null || file.length() == 0) {
-            file = "src/main/resources/log4j.properties";
+            String configFile = System.getProperty("log4j.configuration");
+            if(configFile != null && !configFile.isEmpty()) {
+                file = configFile.replace("file:", "");
+            } else {
+                file = "src/main/resources/log4j.properties";
+            }
         }
         return new File(file);
     }
