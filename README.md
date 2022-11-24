@@ -1,13 +1,92 @@
 # Kafka Log4j Appender Example
 
-## [KafkaLog4jAppender](https://github.com/apache/kafka/blob/trunk/log4j-appender/src/main/java/org/apache/kafka/log4jappender/KafkaLog4jAppender.java)
+### [KafkaLog4jAppender](https://github.com/apache/kafka/blob/trunk/log4j-appender/src/main/java/org/apache/kafka/log4jappender/KafkaLog4jAppender.java)
 
 KafkaLog4jAppender is a log4j appender that produces log messages to Kafka topic.
 
 There are two ways we can configure the log4j properties:
 
 1. log4j.properties file
-2. log4j.xml file
+2. log4j2.xml file
+
+#### Sample log4j.properties
+
+```properties
+# Root logger option
+log4j.rootLogger=INFO,console
+# Redirect log messages to console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yyyy/MM/dd HH:mm:ss} %-5p %c{1}:%L %m%n
+# Redirect log messages to kafka
+log4j.appender.KAFKA=org.apache.kafka.log4jappender.KafkaLog4jAppender
+log4j.appender.KAFKA.brokerList=localhost:9092
+log4j.appender.KAFKA.topic=kafka_log4j_topic
+log4j.appender.KAFKA.syncSend=true
+log4j.appender.KAFKA.ignoreExceptions=false
+log4j.appender.KAFKA.securityProtocol=PLAINTEXT
+log4j.appender.KAFKA.layout=org.apache.log4j.PatternLayout
+log4j.appender.KAFKA.layout.ConversionPattern=%d{yyyy/MM/dd HH:mm:ss} %-5p %c{1}:%L %m%n
+log4j.logger.kafkaLogger=INFO,KAFKA
+```
+
+In order to external log4j.properties configuration file, we need to use `-Dlog4j.configuration`
+
+```sh
+-Dlog4j.configuration=file:/tmp/log4j.properties
+```
+
+#### Sample log4j2.xml file
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configuration>
+
+<Configuration status="INFO" name="kafka-log4j-appender-app" packages="com.ranga">
+
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy/MM/dd HH:mm:ss} %-5p %c{1}:%L %m%n</Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- Console appender configuration -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- Kafka appender configuration -->
+        <Kafka name="Kafka" topic="kafka_log4j_topic">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Property name="bootstrap.servers">localhost:9092</Property>
+        </Kafka>
+
+        <Async name="Async">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="Kafka"/>
+        </Async>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- Root logger -->
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+        </Root>
+
+        <Logger name="kafkaLogger" additivity="false" level="INFO">
+            <AppenderRef ref="Kafka"/>
+            <AppenderRef ref="console"/>
+        </Logger>
+
+        <Logger name="org.apache.kafka" level="INFO"/> <!-- avoid recursive logging -->
+    </Loggers>
+</Configuration>
+```
+
+In order to external log4j2.xml configuration file, we need to use `-Dlog4j2.configurationFile`
 
 ```sh
 -Dlog4j2.configurationFile=file:/tmp/log4j2.xml
