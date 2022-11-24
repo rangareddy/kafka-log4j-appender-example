@@ -31,7 +31,7 @@ log4j.appender.KAFKA.layout.ConversionPattern=%d{yyyy/MM/dd HH:mm:ss} %-5p %c{1}
 log4j.logger.kafkaLogger=INFO,KAFKA
 ```
 
-In order to pass external log4j.properties configuration file, we need to use `-Dlog4j.configuration`
+In order to pass external log4j.properties configuration file, we need to use `-Dlog4j.configuration`. For example,
 
 ```sh
 -Dlog4j.configuration=file:/tmp/log4j.properties
@@ -86,7 +86,7 @@ In order to pass external log4j.properties configuration file, we need to use `-
 </Configuration>
 ```
 
-In order to pass external log4j2.xml configuration file, we need to use `-Dlog4j2.configurationFile`
+In order to pass external log4j2.xml configuration file, we need to use `-Dlog4j2.configurationFile`. For example,
 
 ```sh
 -Dlog4j2.configurationFile=file:/tmp/log4j2.xml
