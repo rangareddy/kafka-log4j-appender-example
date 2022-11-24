@@ -7,7 +7,8 @@ import org.apache.log4j.Logger;
 
 import java.io.Closeable;
 import java.time.Duration;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -20,23 +21,24 @@ public class ConsumerUtil implements Closeable {
         this.consumer = getOrCreateConsumer(topicName, kafkaProperties);
     }
 
-    private Consumer<String, String> getOrCreateConsumer(String topicName, Properties kafkaProperties) {
-        Objects.requireNonNull(topicName, "TopicName can't be null");
+    private Consumer<String, String> getOrCreateConsumer(String topicNames, Properties kafkaProperties) {
+        Objects.requireNonNull(topicNames, "TopicName(s) can't be null");
         Objects.requireNonNull(kafkaProperties, "KafkaProperties can't be null");
         Consumer<String, String> consumer = new KafkaConsumer<>(kafkaProperties);
-        consumer.subscribe(Collections.singletonList(topicName));
+        List<String> topics = new ArrayList<>();
+        for (String topicName : topicNames.split(",")) {
+            topics.add(topicName);
+        }
+        consumer.subscribe(topics);
         return consumer;
     }
 
     public void consume() {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(30));
-            logger.info("Total Records : " + records.count());
+            logger.info("Total Records : <" + records.count()+">");
             records.forEach(record -> {
-                logger.info("Record Key " + record.key());
-                logger.info("Record value " + record.value());
-                logger.info("Record partition " + record.partition());
-                logger.info("Record offset " + record.offset());
+                logger.info("Record partition: " + record.partition() + ", Record offset: " + record.offset() + ", Record Key: " + record.key() + ", Record value: " + record.value());
             });
         }
     }

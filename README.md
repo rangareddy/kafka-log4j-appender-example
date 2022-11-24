@@ -4,10 +4,14 @@
 
 KafkaLog4jAppender is a log4j appender that produces log messages to Kafka topic.
 
-There are two ways we can define log4j properties:
+There are two ways we can configure the log4j properties:
 
-1. log4j.properties
-2. log4j.xml
+1. log4j.properties file
+2. log4j.xml file
+
+```sh
+-Dlog4j2.configurationFile=file:/tmp/log4j2.xml
+```
 
 Download the `kafka-log4j-appender-example` project
 

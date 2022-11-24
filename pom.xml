@@ -18,6 +18,7 @@
         <junit.version>4.13</junit.version>
         <kafka.version>3.1.2.7.2.16.0-261</kafka.version>
         <slf4j.version>1.7.30</slf4j.version>
+        <log4j.version>2.5</log4j.version>
     </properties>
 
     <repositories>
@@ -48,6 +49,20 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Support log4j2.xml -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- Support log4j.properties -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

@@ -23,12 +23,12 @@ public class MyKafkaConsumer {
         kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, appConfigUtil.getAutoOffsetResetConfig());
         kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, PLAINTEXT);
+        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, PLAINTEXT.name);
         return kafkaProperties;
     }
 
     public static void main(String[] args) {
-        AppConfigUtil appConfigUtil = new AppConfigUtil(PropertyUtil.getProperties());
+        AppConfigUtil appConfigUtil = new AppConfigUtil(PropertyUtil.getProperties(args));
         ConsumerUtil consumerUtil = new ConsumerUtil(appConfigUtil.getTopicName(), getKafkaProperties(appConfigUtil));
         logger.info("Consuming messages from topic: " + appConfigUtil.getTopicName());
         consumerUtil.consume();

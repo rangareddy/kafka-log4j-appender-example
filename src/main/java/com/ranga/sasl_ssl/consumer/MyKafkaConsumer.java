@@ -9,6 +9,7 @@ import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.log4j.Logger;
+
 import java.util.Properties;
 
 import static com.ranga.util.AppConstants.SASL_KERBEROS_SERVICE_NAME;
@@ -26,7 +27,7 @@ public class MyKafkaConsumer {
         kafkaProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, appConfigUtil.getAutoOffsetResetConfig());
         kafkaProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         kafkaProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SASL_SSL);
+        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SASL_SSL.name);
         kafkaProperties.put(SaslConfigs.SASL_KERBEROS_SERVICE_NAME, SASL_KERBEROS_SERVICE_NAME);
 
         Properties props = appConfigUtil.getProperties();

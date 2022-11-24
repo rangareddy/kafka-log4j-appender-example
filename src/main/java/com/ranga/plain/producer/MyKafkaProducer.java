@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Properties;
 
+import static com.ranga.util.AppConstants.KAFKA_LOGGER;
 import static org.apache.kafka.common.security.auth.SecurityProtocol.PLAINTEXT;
 
 public class MyKafkaProducer {
@@ -19,8 +20,7 @@ public class MyKafkaProducer {
     public static void main(String[] args) {
         AppConfigUtil appConfigUtil = new AppConfigUtil(PropertyUtil.getProperties());
         Properties kafkaProperties = getKafkaProperties(appConfigUtil);
-        String kafkaLoggerName = "kafkaLogger";
-        ProducerUtil producerUtil = new ProducerUtil(kafkaLoggerName, appConfigUtil.getTopicName(), kafkaProperties);
+        ProducerUtil producerUtil = new ProducerUtil(KAFKA_LOGGER, appConfigUtil.getTopicName(), kafkaProperties);
         logger.info("Producing messages to topic: " + appConfigUtil.getTopicName());
         producerUtil.produce();
     }
@@ -30,7 +30,7 @@ public class MyKafkaProducer {
         kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, appConfigUtil.getBootstrapServers());
         kafkaProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         kafkaProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, PLAINTEXT);
+        kafkaProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, PLAINTEXT.name);
         return kafkaProperties;
     }
 }

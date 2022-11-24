@@ -26,14 +26,16 @@ public class ProducerUtil implements Closeable {
         createTopicIfNotPresents(kafkaProperties, topicName);
     }
 
-    public static void createTopicIfNotPresents(Properties kafkaProperties, String topicName) {
+    public static void createTopicIfNotPresents(Properties kafkaProperties, String topicNames) {
         Admin admin = Admin.create(kafkaProperties);
         try {
-            if (!admin.listTopics().names().get().contains(topicName)) {
-                admin.createTopics(Collections.singleton(new NewTopic(topicName, 1, (short) 1))).all().get();
-                logger.info("Topic " + topicName + " created successfully");
-            } else {
-                logger.debug("Topic " + topicName + " already exists");
+            for (String topicName : topicNames.split(",")) {
+                if (!admin.listTopics().names().get().contains(topicName)) {
+                    admin.createTopics(Collections.singleton(new NewTopic(topicName, 1, (short) 1))).all().get();
+                    logger.info("Topic " + topicName + " created successfully");
+                } else {
+                    logger.debug("Topic " + topicName + " already exists");
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
