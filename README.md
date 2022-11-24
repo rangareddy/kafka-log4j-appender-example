@@ -92,9 +92,9 @@ In order to pass external log4j2.xml configuration file, we need to use `-Dlog4j
 -Dlog4j2.configurationFile=file:/tmp/log4j2.xml
 ```
 
-## Kafka Log4j Integration
+## Kafka Log4j Appender Integration
 
-### 1. PLAINTEXT
+### 1. Using PLAINTEXT protocol
 
 **Step1:** Download the `kafka-log4j-appender-example` project
 
@@ -133,7 +133,7 @@ java -Dlog4j.configuration=file:config/log4j.properties \
  com.ranga.plain.consumer.MyKafkaConsumer
 ```
 
-### 2. SASL_PLAINTEXT
+### 2. Using SASL_PLAINTEXT protocol 
 
 **Step1:** Download the `kafka-log4j-appender-example` project
 
@@ -201,27 +201,77 @@ java
  com.ranga.sasl.consumer.MyKafkaConsumer
 ```
 
-### SASL_SSL
+### 2. Using SASL_SSL protocol
 
-**Step1:** Java Producer SASL_SSL Example
+**Step1:** Download the `kafka-log4j-appender-example` project
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
-  com.ranga.sasl_ssl.producer.MyKafkaProducer
+git clone https://github.com/rangareddy/kafka-log4j-appender-example.git
+cd kafka-log4j-appender-example/
 ```
 
-**Step2:** Java Consumer SASL_SSL Example
+**Step2:** Creating and Exporting the kafka client jaas file
 
-```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
-  com.ranga.sasl_ssl.consumer.MyKafkaConsumer
+`vi /tmp/kafka_client_jaas.conf`
+
+```shell
+KafkaClient{
+    com.sun.security.auth.module.Krb5LoginModule required
+    useKeyTab=true
+    storeKey=true
+    keyTab="/tmp/kafka.keytab"
+    principal="kafka/localhost@HADOOP.COM"
+    serviceName="kafka";
+};
 ```
 
-**Step3:** Java KafkaLog4jAppender SASL_SSL Example
+> According to your cluster update the `keyTab` and `principal` values in above config file.
+
+```shell
+export KAFKA_OPTS="-Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf"
+```
+
+**Step3:** According to your cluster, update the following property values in `log4j_sasl_ssl.properties`.
+
+`vi config/log4j_sasl_ssl.properties`
 
 ```sh
-java -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
-  com.ranga.sasl_ssl.KafkaLog4jAppenderSaslSslApp
+log4j.appender.KAFKA.brokerList=localhost:9092
+log4j.appender.KAFKA.clientJaasConfPath=/tmp/kafka_client_jaas.conf
+log4j.appender.KAFKA.kerb5ConfPath=/tmp/krb5.conf
+log4j.appender.KAFKA.sslTruststoreLocation=</path/to/truststore>
+log4j.appender.KAFKA.sslTruststorePassword=changeit
+log4j.appender.KAFKA.sslKeystoreType=jks
+log4j.appender.KAFKA.sslKeystoreLocation=</path/to/keystore>
+log4j.appender.KAFKA.sslKeystorePassword=changeit
+```
+
+**Step4:** Build the `kafka-log4j-appender-example` project
+
+```sh
+mvn clean package -DskipTests
+```
+
+**Step5:** Run the following code to test
+
+```sh
+java 
+ -Dlog4j.configuration=file:config/log4j_sasl_ssl.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.sasl_ssl.KafkaLog4jAppenderSaslSslApp
+```
+
+>  If application expects client jaas file pass the below parameters with updated paths.
+> -Djava.security.auth.login.config=/tmp/kafka_client_jaas.conf \
+> -Djava.security.krb5.conf=/tmp/krb5.conf
+
+**Step6:** Verify the log messages are written to Kafka topic `kafka_log4j_sasl_ssl_topic`
+
+```sh
+java 
+ -Dlog4j.configuration=file:config/log4j_sasl_ssl.properties \
+ -cp target/kafka-log4j-appender-example-1.0.0-SNAPSHOT.jar \
+ com.ranga.sasl_ssl.consumer.MyKafkaConsumer
 ```
 
 ## Kafka CLI Commands
