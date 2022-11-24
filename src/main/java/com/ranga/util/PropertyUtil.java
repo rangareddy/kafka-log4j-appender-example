@@ -7,12 +7,34 @@ import java.util.Properties;
 
 public class PropertyUtil {
 
-    public static Properties getProperties() {
-        File file = new File("src/main/resources/log4j.properties");
-        return getProperties(file);
+    private static File getConfigFile() {
+        return getConfigFile(null);
     }
 
-    public static Properties getProperties(File file) {
+    private static File getConfigFile(String file) {
+        if(file == null || file.length() == 0) {
+            file = "src/main/resources/log4j.properties";
+        }
+        return new File(file);
+    }
+
+    public static Properties getProperties() {
+        return getProperties(getConfigFile());
+    }
+
+    public static Properties getProperties(String file) {
+        return getProperties(getConfigFile(file));
+    }
+
+    public static Properties getProperties(String args[], String file) {
+        if(args.length > 0 || file != null) {
+            return getProperties(getConfigFile(args.length > 0 ? args[0] : file));
+        } else {
+            return getProperties(getConfigFile());
+        }
+    }
+
+    private static Properties getProperties(File file) {
         Properties prop = new Properties();
         try (InputStream stream = new FileInputStream(file)) {
             prop.load(stream);

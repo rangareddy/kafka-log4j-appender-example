@@ -2,15 +2,16 @@ package com.ranga.util;
 
 import java.util.Properties;
 
-public class AppConfig {
+import static com.ranga.util.AppConstants.AUTO_OFFSET_RESET_CONFIG;
+import static com.ranga.util.AppConstants.MY_CONSUMER_GROUP;
+
+public class AppConfigUtil {
 
     private final Properties properties;
     private final String bootstrapServers;
     private final String topicName;
-    private final String consumerGroupId = "my_consumer_group";
-    private final String autoOffsetResetConfig = "earliest";
 
-    public AppConfig(Properties properties) {
+    public AppConfigUtil(Properties properties) {
         this.properties = properties;
         bootstrapServers = properties.getProperty("log4j.appender.KAFKA.brokerList");
         topicName = properties.getProperty("log4j.appender.KAFKA.topic");
@@ -29,20 +30,20 @@ public class AppConfig {
     }
 
     public String getConsumerGroupId() {
-        return consumerGroupId;
+        return MY_CONSUMER_GROUP;
     }
 
     public String getAutoOffsetResetConfig() {
-        return autoOffsetResetConfig;
+        return AUTO_OFFSET_RESET_CONFIG;
     }
 
     @Override
     public String toString() {
         return "AppConfig{" +
-                "bootstrapServers='" + bootstrapServers + '\'' +
-                ", topicName='" + topicName + '\'' +
-                ", consumerGroupId='" + consumerGroupId + '\'' +
-                ", autoOffsetResetConfig='" + autoOffsetResetConfig + '\'' +
+                "bootstrapServers='" + getBootstrapServers() + '\'' +
+                ", topicName='" + getTopicName() + '\'' +
+                ", consumerGroupId='" + getConsumerGroupId() + '\'' +
+                ", autoOffsetResetConfig='" + getAutoOffsetResetConfig() + '\'' +
                 '}';
     }
 }

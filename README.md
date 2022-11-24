@@ -1,5 +1,14 @@
 # Kafka Log4j Appender Example
 
+## [KafkaLog4jAppender](https://github.com/apache/kafka/blob/trunk/log4j-appender/src/main/java/org/apache/kafka/log4jappender/KafkaLog4jAppender.java)
+
+KafkaLog4jAppender is a log4j appender that produces log messages to Kafka topic.
+
+There are two ways we can define log4j properties:
+
+1. log4j.properties
+2. log4j.xml
+
 Download the `kafka-log4j-appender-example` project
 
 ```sh
@@ -185,8 +194,8 @@ sasl.kerberos.service.name=kafka
 ```
 
 ```shell
-kafka-console-producer --broker-list localhost:9092 \
-  --topic kafka_log4j_topic \
+kafka-console-producer --broker-list `hostname -f`:9092 \
+  --topic kafka_log4j_sasl_topic \
   --producer.config /tmp/producer.properties
 ```
 
@@ -201,8 +210,8 @@ sasl.kerberos.service.name=kafka
 ```
 
 ```sh
-kafka-console-consumer --bootstrap-server localhost:9092 \
-  --topic kafka_log4j_topic --from-beginning \
+kafka-console-consumer --bootstrap-server `hostname -f`:9092 \
+  --topic kafka_log4j_sasl_topic --from-beginning \
   --consumer.config /tmp/consumer.properties 
 ```
 

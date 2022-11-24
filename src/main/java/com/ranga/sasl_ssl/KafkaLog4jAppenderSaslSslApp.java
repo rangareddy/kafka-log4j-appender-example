@@ -2,8 +2,11 @@ package com.ranga.sasl_ssl;
 
 import org.apache.log4j.Logger;
 
+import static com.ranga.util.AppConstants.KAFKA_SASL_SSL_LOGGER;
+
 public class KafkaLog4jAppenderSaslSslApp {
-    private static final Logger kafkaSaslSslLogger = Logger.getLogger("kafkaSaslSslLogger");
+
+    private static final Logger kafkaSaslSslLogger = Logger.getLogger(KAFKA_SASL_SSL_LOGGER);
     private static final Logger logger = Logger.getLogger(KafkaLog4jAppenderSaslSslApp.class.getName());
 
     public static void main(String[] args) {

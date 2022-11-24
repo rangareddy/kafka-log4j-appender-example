@@ -2,9 +2,11 @@ package com.ranga.plain;
 
 import org.apache.log4j.Logger;
 
+import static com.ranga.util.AppConstants.KAFKA_LOGGER;
+
 public class KafkaLog4jAppenderApp {
 
-    private static final Logger kafkaLogger = Logger.getLogger("kafkaLogger");
+    private static final Logger kafkaLogger = Logger.getLogger(KAFKA_LOGGER);
     private static final Logger logger = Logger.getLogger(KafkaLog4jAppenderApp.class.getName());
 
     public static void main(String[] args) {

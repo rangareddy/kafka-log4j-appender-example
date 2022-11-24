@@ -6,20 +6,20 @@ import org.apache.kafka.clients.producer.*;
 import org.apache.log4j.Logger;
 
 import java.io.Closeable;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Objects;
 import java.util.Properties;
 
 public class ProducerUtil implements Closeable {
 
-    private static final SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static final Logger logger = Logger.getLogger(ProducerUtil.class.getName());
     private final Producer<String, String> producer;
     private final String topicName;
     private final Logger kafkaLogger;
 
     public ProducerUtil(String kafkaLoggerName, String topicName, Properties kafkaProperties) {
+        Objects.requireNonNull(topicName, "TopicName can't be null");
+        Objects.requireNonNull(kafkaLoggerName, "KafkaLoggerName can't be null");
         this.topicName = topicName;
         this.producer = getProducer(kafkaProperties);
         this.kafkaLogger = Logger.getLogger(kafkaLoggerName);
@@ -50,6 +50,7 @@ public class ProducerUtil implements Closeable {
     }
 
     public void produce(String message) {
+        Objects.requireNonNull(message, "Message can't be null");
         ProducerRecord<String, String> record = new ProducerRecord<>(topicName, message);
         ProducerCallBack callBack = new ProducerCallBack();
         producer.send(record, callBack);
@@ -70,7 +71,7 @@ public class ProducerUtil implements Closeable {
             if (e != null) {
                 logger.error("Error while producing message to topic :" + recordMetadata, e);
             } else {
-                String message = String.format("Sent message to topic:%s partition:%s  offset:%s", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
+                String message = String.format("Sent message to topic: %s partition: %s  offset: %s", recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset());
                 logger.info(message);
             }
         }
